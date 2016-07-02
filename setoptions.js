@@ -33,10 +33,23 @@ $("#forceupdate").click(function(){
 	updateList();
 	alert("Updated");
 });
+$("#setdefault").click(function(){
+	chrome.storage.sync.set({
+		options: defaultoptions
+	}, function() {
+		//display success message
+		var status = $("#status");
+		status.html('<div class="alert alert-success">Options Successfully Saved</div>');
+		setTimeout(function() {
+		  status.html( '');
+		}, 5000);
+	});
+	window.location.reload();
+});
 $(document).ready(function(){
 	//load saved options, or use defaults
 	 chrome.storage.sync.get({
-		options: {"updateTime": 1440, "neSupport":0}
+		options: defaultoptions
 	 }, function(data) {
 		 for (var optionname in data.options){
 			if (data.options.hasOwnProperty(optionname)) {

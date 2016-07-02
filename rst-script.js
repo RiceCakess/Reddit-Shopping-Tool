@@ -4,12 +4,17 @@
 //add/remove subreddit list
 var uservis = {};
 var options = {};
+var defaultoptions = 
+{
+	"updateTime": 1440, 
+	"neSupport":0
+};
 $(document).ready(function(){
 	//check if website is reddit and not options page
 	if (window.location.href.indexOf("reddit") != -1){
 		//load options before running rest of script
 		chrome.storage.sync.get({
-			options: {"updateTime": 1440, "neSupport":0}
+			options: defaultoptions
 		 }, function(data) {
 				options = data.options;
 				checkForUpdate();
@@ -43,16 +48,20 @@ function labelUsers(){
 				uservis[name.toLowerCase()] = users[name];
 			}
 		}
+		//automoderator exception
+		uservis["automoderator"] = "";
+		
 		//loop through all name tags and set them as banned/sketchy, if any
 		$( ".author" ).each(function() {
 			//check if user is on the list
 			var bancode = uservis[$(this).text().toLowerCase()];
-			if(bancode > 0 && $(this).text().toLowerCase() != "automoderator"){
+			if(bancode > 0){
 				//translate bancode and set it next to thier name 
 				$(this).html($(this).text() + " [" + getReasonString(bancode) + "]");
 				$(this).addClass("rst-banned-" + bancode);
 			}
 		});
+		
 	});
 }
 function updateList(){

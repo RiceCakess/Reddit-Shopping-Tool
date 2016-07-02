@@ -23,8 +23,12 @@
 			<div class="tab-content">
 				<div id="settings" class="tab-pane fade in active">
 					<br>
-					
 					<div id="status"></div>
+					<center>
+						<button class="btn-lg btn-warning btn" id="forceupdate" style="margin: 5px;">Force Ban List Update</button>
+						<button class="btn-lg btn-success btn" id="setdefault" style="margin: 5px;">Set Default Options</button>
+					</center>
+					<hr>
 					<div style="padding: 10px; border: 2px solid #d35400; border-radius: 5px; margin-bottom: 5px;">
 						<label><h2>Update Ban List:</h2></label>
 						<select id="updateTime" class="form-control rst-option" style="width: 400px; ">
@@ -49,7 +53,6 @@
 							<option value="1">Enabled</option>
 						</select>
 					</div>
-					<button class="btn-lg btn-warning btn" id="forceupdate" style="margin-top: 20px;">Force Ban List Update</button>
 					<center><button class="btn-lg btn-default btn" id="save" style="margin-top: 20px;">Save Settings</button></center>
 					<script src="setoptions.js"></script>
 				</div>
