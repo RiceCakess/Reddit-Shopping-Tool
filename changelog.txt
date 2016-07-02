@@ -1,0 +1,18 @@
+Version 1.0.0 / 2016-6-13
+* Initial Release
+
+Version 1.0.1 / 2016-6-13
+* Minor Bug Fixes
+
+Version 1.1.0 / 2016-7-1
+* New tags [SKETCHY], [TROLL], [ACCOUNT COMPROMISED]
+* Added RES never ending support (disabled by default, enable it in options)
+* Added Options page
+* Added option to change ban list update time
+* Added option to enable and disable RES
+* Added force update button
+* Added data tab in options to view current ban list
+* Added info tab
+* Minor Bug Fixes
+
+ 
