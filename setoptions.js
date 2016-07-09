@@ -54,7 +54,14 @@ $(document).ready(function(){
 		 for (var optionname in data.options){
 			if (data.options.hasOwnProperty(optionname)) {
 				//set defaults
-				$("#" + optionname).val(data.options[optionname]).change();
+				if(optionname === "subreddits"){
+					for(var index in data.options[optionname])
+						$("#" + optionname).append("<li class='list-group-item rst-sub'>/r/" + data.options[optionname][index] + "<button id='delete' class='btn btn-danger' style='float:right; margin-top:-6px;'>Delete</button></li>");
+				}
+				else{
+					$("#" + optionname).val(data.options[optionname]).change();
+				}
+				
 			}
 			
 		}
@@ -62,7 +69,7 @@ $(document).ready(function(){
 	
 });
 function loadUsers(){
-	
+	checkForUpdate();
 	chrome.storage.local.get('users', function(data){
 		//loop through banned users and check if uservis contains any banned users
 		users = JSON.parse(data.users);

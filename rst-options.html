@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
-	<head><title>RST Options</title></head>
-	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-	<script src="jquery.js"></script>
-	<script src="bootstrapscript.js"></script>
-	<script src="rst-script.js"></script>
-	<style>
-		
-	</style>
+	<head>
+		<title>RST Options</title>
+		<meta name="google" value="notranslate">
+		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+		<script src="jquery.js"></script>
+		<script src="bootstrapscript.js"></script>
+		<script src="rst-script.js"></script>
+	</head>
 	<body>
 		<div class="title" style="background-color: #e67e22; color: white; padding: 20px;">
 			<div class="container">
@@ -52,6 +52,13 @@
 							<option value="0" selected="selected">Disabled</option>
 							<option value="1">Enabled</option>
 						</select>
+					</div>
+					<div style="padding: 10px; border: 2px solid #d35400; border-radius: 5px; margin-bottom: 5px;">
+						<label><h2>Subreddits</h2></label>
+						<ul class="list-group" id="subreddits">
+							
+						</ul>
+						<input class="form-control" id="subreddit-add-name"><button class="btn btn-default">Add Subreddit</button>
 					</div>
 					<center><button class="btn-lg btn-default btn" id="save" style="margin-top: 20px;">Save Settings</button></center>
 					<script src="setoptions.js"></script>

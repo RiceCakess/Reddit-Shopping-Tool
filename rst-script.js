@@ -4,10 +4,12 @@
 //add/remove subreddit list
 var uservis = {};
 var options = {};
+var version = "1.1.0";
 var defaultoptions = 
 {
 	"updateTime": 1440, 
-	"neSupport":0
+	"neSupport": 0,
+	"subreddits": ["hardwareswap","gameswap", "mechmarket", "hardwareswapaustralia","phoneswap","detailswap","hardwareswapuk","hardwareswapeu","canadianhardwareswap","steamgameswap","avexchange", "trade","ecigclassifieds","borrow", "starcitizen_trades","rotmgtradingpost","care","mynintendotrades","slavelabour","indegameswap","appleswap","redditbay"]
 };
 $(document).ready(function(){
 	//check if website is reddit and not options page
@@ -25,11 +27,17 @@ $(document).ready(function(){
 });
 function checkForUpdate(){
 	//check last update timestamp
-	chrome.storage.local.get('timestamp', function(data){
-		//update list if list is X days old or empty
-		if(options["updateTime"] != -1 && (jQuery.isEmptyObject(data) || (Date.now() - data.timestamp)/1000 > options["updateTime"]*60*1000)){
+	chrome.storage.local.get(['timestamp','version'], function(data){
+		//update list if list is X days old or empty or extension was updated
+		if(data.timestamp == null || 
+			data.version == null || 
+			(options["updateTime"] != -1 &&  (Date.now() - data.timestamp)/1000 > options["updateTime"]*60*1000) ||
+			data.version !== version)
+		{
 			updateList();
 		}
+		
+		
 	});
 	//create an array for users that need to be checked
 	$( ".author" ).each(function() {
@@ -104,10 +112,10 @@ function updateList(){
 					jusers[name.toLowerCase()] = code;
 				}
 			});
-			//write array and time to local storage
+			//write array, time, and version to local storage
 			chrome.storage.local.set({"users" : JSON.stringify(jusers)});
 			chrome.storage.local.set({"timestamp" : Date.now()});
-			
+			chrome.storage.local.set({"version" : version});
 			console.log("Ban List Updated!");
 		}
 	});
