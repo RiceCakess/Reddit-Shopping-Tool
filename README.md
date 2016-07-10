@@ -1,6 +1,4 @@
 # Reddit-Shopping-Tool
-<h2>Reddit Shopping Tool</h2>
-<hr>
 Reddit Shopping Tool is an extension that will help you identify any users that have been banned on the <a href="https://www.reddit.com/r/UniversalScammerList/wiki/banlist">Universal Scammer List</a> 
 
 <a href="https://chrome.google.com/webstore/detail/reddit-shopping-tool/pimdepbkfokgeadmhmhfpapfdbodadlg">Chrome Extension Link</a>

@@ -4,17 +4,19 @@
 		<title>RST Options</title>
 		<meta name="google" value="notranslate">
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+		<link href="options.css" rel="stylesheet">
 		<script src="jquery.js"></script>
 		<script src="bootstrapscript.js"></script>
 		<script src="rst-script.js"></script>
+		<script src="setoptions.js"></script>
 	</head>
 	<body>
-		<div class="title" style="background-color: #e67e22; color: white; padding: 20px;">
+		<div class="title title-fluid">
 			<div class="container">
 				<h1>RST <span class="glyphicon glyphicon-cog"></span>ptions</h1>
 			</div>
 		</div>
-		<div class="container" style="padding-top: 20px;">
+		<div class="container main-content">
 			<ul class="nav nav-tabs">
 				<li class="active"><a data-toggle="tab" href="#settings">Settings</a></li>
 				<li><a href="#data" data-toggle="tab" id="data-tab">Data</a></li>
@@ -26,10 +28,10 @@
 					<div id="status"></div>
 					<center>
 						<button class="btn-lg btn-warning btn" id="forceupdate" style="margin: 5px;">Force Ban List Update</button>
-						<button class="btn-lg btn-success btn" id="setdefault" style="margin: 5px;">Set Default Options</button>
+						<button class="btn-lg btn-success btn" id="setdefault" style="margin: 5px;">Restore Default Settings</button>
 					</center>
 					<hr>
-					<div style="padding: 10px; border: 2px solid #d35400; border-radius: 5px; margin-bottom: 5px;">
+					<div class="option-box">
 						<label><h2>Update Ban List:</h2></label>
 						<select id="updateTime" class="form-control rst-option" style="width: 400px; ">
 							<option value="60">Every Hour</option>
@@ -46,22 +48,29 @@
 							<option value="-1">Never</option>
 						</select>
 					</div>
-					<div style="padding: 10px; border: 2px solid #d35400; border-radius: 5px; margin-bottom: 5px;">
+					<div class="option-box">
 						<label><h2>Enable/Disable RES Never Ending Support:</h2></label>
-						<select id="neSupport" class="form-control rst-option" style="width: 400px; ">
+						<select id="neSupport" class="form-control rst-option" style="width: 400px;">
 							<option value="0" selected="selected">Disabled</option>
 							<option value="1">Enabled</option>
 						</select>
 					</div>
-					<div style="padding: 10px; border: 2px solid #d35400; border-radius: 5px; margin-bottom: 5px;">
+					<div class="option-box">
 						<label><h2>Subreddits</h2></label>
 						<ul class="list-group" id="subreddits">
 							
 						</ul>
-						<input class="form-control" id="subreddit-add-name"><button class="btn btn-default">Add Subreddit</button>
+						<div class="input-group">
+							<span class="input-group-addon" id="basic-addon1">/r/</span>
+						    
+							<input type="text" class="form-control add-subreddit-name" placeholder="Subreddit Name...">
+							<span class="input-group-btn">
+								<button class="btn btn-default add-subreddit-btn" type="button">Add Subreddit</button>
+							</span>
+						</div>
 					</div>
 					<center><button class="btn-lg btn-default btn" id="save" style="margin-top: 20px;">Save Settings</button></center>
-					<script src="setoptions.js"></script>
+					
 				</div>
 				<div id="data" class="tab-pane fade">
 					<br>

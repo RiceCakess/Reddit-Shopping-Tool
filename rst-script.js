@@ -36,16 +36,17 @@ function checkForUpdate(){
 		{
 			updateList();
 		}
-		
-		
-	});
-	//create an array for users that need to be checked
-	$( ".author" ).each(function() {
-		uservis[$(this).text().toLowerCase()] = "";
 	});
 }
 function labelUsers(){
-	
+	//create an array for users that need to be checked
+	$( ".author" ).each(function() {
+		for(var index in options.subreddits){
+			//check if post is from trading subreddits
+			if($(this).parents('.thing').attr("data-subreddit") === options.subreddits[index])
+				uservis[$(this).text().toLowerCase()] = "";
+		}
+	});
 	chrome.storage.local.get('users', function(data){
 		//loop through banned users and check if uservis contains any banned users
 		users = JSON.parse(data.users);
