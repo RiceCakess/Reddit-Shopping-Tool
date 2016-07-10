@@ -8,10 +8,10 @@ Reddit Shopping Tool is an extension that will help you identify any users that 
 <strong>Change Log</strong>
 <pre>
 Version 1.0.0 / 2016-6-13
-* Initial Release
+* Initial release
 
 Version 1.0.1 / 2016-6-13
-* Minor Bug Fixes
+* Minor bug fixes
 
 Version 1.1.0 / 2016-7-1
 * New tags [SKETCHY], [TROLL], [ACCOUNT COMPROMISED]
@@ -22,6 +22,11 @@ Version 1.1.0 / 2016-7-1
 * Added force update button
 * Added data tab in options to view current ban list
 * Added info tab
-* Minor Bug Fixes
-* Fixed AutoModerator tag
+* Minor bug fixes
+
+Version 1.2.0 / 2016-7-10
+* Added subreddit filter
+* Added option to edit filter list
+* Fixed: update list when extension updates
+
 </pre>

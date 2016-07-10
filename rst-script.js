@@ -4,7 +4,7 @@
 //add/remove subreddit list
 var uservis = {};
 var options = {};
-var version = "1.1.0";
+var version = "1.2.0";
 var defaultoptions = 
 {
 	"updateTime": 1440, 
