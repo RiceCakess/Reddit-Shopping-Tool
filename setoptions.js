@@ -23,6 +23,25 @@ $(document).ready(function(){
 			}
 		}
 	});
+	initBtn();
+	$(".version").html(version);
+	$('.changelog').load("changelog.txt");
+});
+function loadUsers(){
+	checkForUpdate();
+	chrome.storage.local.get('users', function(data){
+		//loop through banned users and check if uservis contains any banned users
+		users = JSON.parse(data.users);
+		for (var name in users){
+			//set as banned if not already on the list
+			if (users.hasOwnProperty(name)) {
+				//add to textarea display
+				$(".banned-users").append(name + " " + getReasonString(users[name]) + "\r\n");
+			}
+		}
+	});
+}
+function initBtn(){
 	//Initialize all buttons
 	$("#data-tab").click(function(){
 		//load the banned user data list when requested
@@ -83,24 +102,10 @@ $(document).ready(function(){
 			//display success message and scroll to top
 			var status = $("#status");
 			status.html('<div class="alert alert-success">Options Successfully Saved</div>');
-			$(window).scrollTop();
+			$(window).scrollTop(0);
 			setTimeout(function() {
 			  status.html('');
 			}, 5000);
 		});
-	});
-});
-function loadUsers(){
-	checkForUpdate();
-	chrome.storage.local.get('users', function(data){
-		//loop through banned users and check if uservis contains any banned users
-		users = JSON.parse(data.users);
-		for (var name in users){
-			//set as banned if not already on the list
-			if (users.hasOwnProperty(name)) {
-				//add to textarea display
-				$(".banned-users").append(name + " " + getReasonString(users[name]) + "\r\n");
-			}
-		}
 	});
 }

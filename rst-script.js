@@ -117,7 +117,7 @@ function updateList(){
 			chrome.storage.local.set({"users" : JSON.stringify(jusers)});
 			chrome.storage.local.set({"timestamp" : Date.now()});
 			chrome.storage.local.set({"version" : version});
-			console.log("Ban List Updated!");
+			console.log("[RST] Ban List Updated!");
 		}
 	});
 }
@@ -131,13 +131,13 @@ function checkForChanges()
 			//set all 
 			pagenum = $('.NERPageMarker').length;
 			labelUsers();
-			console.log("RES never ending page load detected!");
+			//console.log("[RST] RES never ending page load detected!");
 		}
 		//recheck every second
         setTimeout(checkForChanges, 1000);
 	}
 	else{
-		console.log("Never Ending Support disabled! Enable it in the options!");
+	console.log("[RST] Never Ending Support disabled! Enable it in the options!");
 	}
 }
 function getReasonString(code){
