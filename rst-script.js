@@ -1,7 +1,3 @@
-//settings:
-//change update duration
-//enable/disable neverending
-//add/remove subreddit list
 var uservis = {};
 var options = {};
 var version = "1.2.0";
@@ -105,7 +101,7 @@ function updateList(){
 						code = 2;
 					else if(reason.includes("troll"))
 						code = 3;
-					else if(reason.includes("compromised"))
+					else if(reason.includes("compromise"))
 						code = 4;
 					else
 						code = 1;
