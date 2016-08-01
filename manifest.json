@@ -1,10 +1,9 @@
 {
   "manifest_version": 2,
-
   "name": "Reddit Shopping Tool",
   "short_name": "RST",
   "description": "Automatically labels users as scammers if they are on the Universal Ban List while you browse",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "icons": { "16": "icon/icon16.png",
            "48": "icon/icon48.png",
           "128": "icon/icon128.png" },

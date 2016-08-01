@@ -1,6 +1,6 @@
 var uservis = {};
 var options = {};
-var version = "1.2.0";
+var version = "1.2.1";
 var defaultoptions = 
 {
 	"updateTime": 1440, 
@@ -27,7 +27,7 @@ function checkForUpdate(){
 		//update list if list is X days old or empty or extension was updated
 		if(data.timestamp == null || 
 			data.version == null || 
-			(options["updateTime"] != -1 &&  (Date.now() - data.timestamp)/1000 > options["updateTime"]*60*1000) ||
+			(options["updateTime"] != -1 &&  (Date.now() - data.timestamp)/1000 > options.updateTime*60) ||
 			data.version !== version)
 		{
 			updateList();
