@@ -3,7 +3,10 @@
 var loaded = false;
 $(document).ready(function(){
 	//load saved options, or use defaults
-	 chrome.storage.sync.get({
+	 /*
+	 chrome.storage.sync.get({ 
+	 */
+	 chrome.storage.local.get({ 
 		options: defaultoptions
 	 }, function(data) {
 		 for (var optionname in data.options){
@@ -29,20 +32,23 @@ $(document).ready(function(){
 });
 function loadUsers(){
 	checkForUpdate();
-	chrome.storage.local.get('users', function(data){
-		//loop through banned users and check if uservis contains any banned users
+	chrome.storage.local.get(['users','timestamp'], function(data){
+		//loop through banned users
 		users = JSON.parse(data.users);
+		var date = (Date.now() - data.timestamp)/1000;
+		var ago = (Math.round(date/86400) > 0) ? Math.round(date/86400) + " days ago" : Math.round(date/3600) + " hours ago";
+		$("#lastUpdate").html("Last Updated: " + ago);
 		for (var name in users){
-			//set as banned if not already on the list
 			if (users.hasOwnProperty(name)) {
 				//add to textarea display
-				$(".banned-users").append(name + " " + getReasonString(users[name]) + "\r\n");
+				$(".banned-users").append(name + " - " + getReasonString(users[name].code) + " \"" + users[name].reason + "\" " + users[name].subreddit + "\r\n");
+				
 			}
 		}
 	});
 }
+//Initialize all buttons
 function initBtn(){
-	//Initialize all buttons
 	$("#data-tab").click(function(){
 		//load the banned user data list when requested
 		if(!loaded){
@@ -55,7 +61,10 @@ function initBtn(){
 		alert("Updated");
 	});
 	$("#setdefault").click(function(){
+		/*
 		chrome.storage.sync.set({
+		*/
+		chrome.storage.local.set({
 			options: defaultoptions
 		}, function() {
 			//display success message
@@ -96,7 +105,10 @@ function initBtn(){
 		optionset[optionname] = value;
 		
 		//save array to chrome sync'd storage
+		/*
 		chrome.storage.sync.set({
+		*/
+		chrome.storage.local.set({
 			options: optionset
 		}, function() {
 			//display success message and scroll to top

@@ -28,4 +28,19 @@ Version 1.2.0 / 2016-7-10
 * Added subreddit filter
 * Added option to edit filter list
 * Fixed: update list when extension updates
+
+Version 1.2.1 / 2016-8-1
+* Fixed bug where list was not updating
+
+Version 1.3.0 / 2017-1-28
+* Fixed typos on the subreddit list
+* Added badge indicators
+* Added more info box when clicking on the badge
+* Added parsing for subreddit and reason data
+* Added last update time at the data tab in the options page
+* Added Save Settings button to top of options page
+* Added option to disable more info box
+* Added contact link
+* Added support for Firefox
+* Minor bug fixes
 </pre>

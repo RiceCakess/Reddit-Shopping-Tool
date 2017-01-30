@@ -27,6 +27,7 @@
 					<br>
 					<div id="status"></div>
 					<center>
+						<button class="btn-lg btn-primary btn" id="save" style="margin: 5px;">Save Settings</button>
 						<button class="btn-lg btn-warning btn" id="forceupdate" style="margin: 5px;">Force Ban List Update</button>
 						<button class="btn-lg btn-success btn" id="setdefault" style="margin: 5px;">Restore Default Settings</button>
 					</center>
@@ -49,10 +50,17 @@
 						</select>
 					</div>
 					<div class="option-box">
-						<label><h2>Enable/Disable RES Never Ending Support:</h2></label>
+						<label><h2>RES Never Ending Support:</h2></label>
 						<select id="neSupport" class="form-control rst-option" style="width: 400px;">
 							<option value="0" selected="selected">Disabled</option>
 							<option value="1">Enabled</option>
+						</select>
+					</div>
+					<div class="option-box">
+						<label><h2>More Info Box:</h2></label>
+						<select id="infobox" class="form-control rst-option" style="width: 400px;">
+							<option value="0">Disabled</option>
+							<option value="1" selected="selected">Enabled</option>
 						</select>
 					</div>
 					<div class="option-box">
@@ -69,18 +77,17 @@
 							</span>
 						</div>
 					</div>
-					<center><button class="btn-lg btn-default btn" id="save" style="margin-top: 20px;">Save Settings</button></center>
-					
 				</div>
 				<div id="data" class="tab-pane fade">
 					<br>
 					<div class="row">
 						<textarea class="form-control banned-users" rows="40"></textarea>
+						<span id="lastUpdate"></span>
 					</div>
 				</div>
 				<div id="info" class="tab-pane fade">
 					<br>
-					<label>Developer:</label> David C. (RiceCakes) <br>
+					<label>Developer:</label> David C. (RiceCakes) <a href="https://www.reddit.com/message/compose/?to=Rice_Cakess">Contact</a><br>
 					<label>Version:</label> <span class="version"></span> <br>
 					<label>Change Log:</label><br>
 					<pre class="changelog"></pre>

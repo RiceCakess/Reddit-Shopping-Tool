@@ -1,17 +1,24 @@
 var uservis = {};
 var options = {};
-var version = "1.2.1";
+var version = "1.3.0";
 var defaultoptions = 
 {
 	"updateTime": 1440, 
 	"neSupport": 0,
-	"subreddits": ["hardwareswap","gameswap", "mechmarket", "hardwareswapaustralia","phoneswap","detailswap","hardwareswapuk","hardwareswapeu","canadianhardwareswap","steamgameswap","avexchange", "trade","ecigclassifieds","borrow", "starcitizen_trades","rotmgtradingpost","care","mynintendotrades","slavelabour","indegameswap","appleswap","redditbay"]
+	"infobox": 1,
+	"subreddits": ["hardwareswap","gameswap", "mechmarket", "hardwareswapaustralia","phoneswap","detailswap","hardwareswapuk","hardwareswapeu","canadianhardwareswap","steamgameswap","avexchange", "trade","ecigclassifieds","borrow", "starcitizen_trades","rotmgtradingpost","care","mynintendotrades","slavelabour","indiegameswap","appleswap","redditbay","giftcardexchange"]
 };
+var lastInfoBox;
 $(document).ready(function(){
 	//check if website is reddit and not options page
 	if (window.location.href.indexOf("reddit") != -1){
 		//load options before running rest of script
+		
+		/*
+		for chrome version only:
 		chrome.storage.sync.get({
+		*/
+		chrome.storage.local.get({
 			options: defaultoptions
 		 }, function(data) {
 				options = data.options;
@@ -19,6 +26,7 @@ $(document).ready(function(){
 				labelUsers();
 				checkForChanges();
 		});
+		
 	}
 });
 function checkForUpdate(){
@@ -59,55 +67,81 @@ function labelUsers(){
 		//loop through all name tags and set them as banned/sketchy, if any
 		$( ".author" ).each(function() {
 			//check if user is on the list
-			var bancode = uservis[$(this).text().toLowerCase()];
-			if(bancode > 0){
-				//translate bancode and set it next to thier name 
-				$(this).html($(this).text() + " [" + getReasonString(bancode) + "]");
-				$(this).addClass("rst-banned-" + bancode);
+			var userData = uservis[$(this).text().toLowerCase()];
+			if(userData){
+				//translate bancode and add badge next to their name
+				var html = " <a href='javascript:;' class='rst-banned-" + userData.code + " rst-badge'>" + getReasonString(userData.code) + "</a>";
+				
+				//if infobox is enabled, append next to name
+				if(options['infobox'] == 1)
+					html += "<span class='infobox'><strong>Reported by:</strong> " + userData.subreddit + "\n\r" + " <strong>Reason:</strong> " + userData.reason + " </span>";
+				
+				$(this).after(html);
 			}
 		});
-		
+		$(".rst-badge").click(function(){
+			//on infobox click, make it visible
+			var infobox = $(this).next(".infobox");
+			infobox.css("visibility", (infobox.css("visibility") == "hidden") ? "visible" : "hidden");
+			
+			//make sure that only one infobox is open
+			if(lastInfoBox && !(infobox.is(lastInfoBox))){
+				lastInfoBox.css("visibility", "hidden"); 
+			}
+			lastInfoBox = infobox;
+		});
 	});
 }
 function updateList(){
 	//grab the ban list page as string
 	$.ajax({ 
-		url: 'https://www.reddit.com/r/UniversalScammerList/wiki/banlist', 
+		url: "https://www.reddit.com/r/UniversalScammerList/wiki/banlist", 
 		success: function(data) {
 			//string manipulation to get only names of banned users and reason
 			var src = (data.split('<textarea readonly class="source" rows="20" cols="20">')[1]).replace("</textarea>","");
 			var users = src.split("*");
 			var jusers = {};
 			users.forEach(function(entry){
-				//split up name and reason and clean up strings
-				var reasonsplit = entry.split("#");
-				var name = (reasonsplit[0]).trim().replace("/u/","").split(" ");
-				var name = name[0];
-				var reason = "";
-				if(reasonsplit.length > 1){
-					reason = ((reasonsplit[1]).split(" "))[0];
-				}
-				
-				if(name != ""){
+				//isolate username
+				var userDataSplit = entry.split("#");
+				if(name != "" && entry.length < 150 && userDataSplit.length > 1){
+					var name = (userDataSplit[0]).trim().replace("/u/","").split(" ");
+					var name = name[0];
+					
 					var code = 1;
-					//1 = scammer or unknown (Default)
+					//1 = scammer
 					//2 = sketchy
 					//3 = troll
 					//4 = compromised
 					
-					//reason check 
-					reason = reason.toLowerCase();
+					//split string into three data points: code, reason, subreddit
+					var reason = userDataSplit[1].toLowerCase();
+					
 					if(reason.includes("sketchy"))
 						code = 2;
 					else if(reason.includes("troll"))
 						code = 3;
 					else if(reason.includes("compromise"))
 						code = 4;
-					else
+					else if(reason.includes("scammer"))
 						code = 1;
-					//add to array with bancode
-					jusers[name.toLowerCase()] = code;
-				}
+					else
+						code = 0;
+					
+					//clean up everything else in the string, leaving the reason
+					var reason = entry.replace(/(#\S+)/gi,"");
+					reason = reason.replace("/u/" + name,"");
+					var regExp = /\(([^)]+)\)/;
+					var match = regExp.exec(reason);
+					var subreddit = "";
+					if(match)
+						subreddit = match[1].replace("banned by","").trim();
+					
+					reason = reason.replace(/\(([^)]+)\)/,"").replace("\n","").replace("/", " ").replace("other:","").trim();
+					
+					//add to array with data
+					jusers[name.toLowerCase()] = {code, reason, subreddit};
+				}	
 			});
 			//write array, time, and version to local storage
 			chrome.storage.local.set({"users" : JSON.stringify(jusers)});
@@ -127,7 +161,6 @@ function checkForChanges()
 			//set all 
 			pagenum = $('.NERPageMarker').length;
 			labelUsers();
-			//console.log("[RST] RES never ending page load detected!");
 		}
 		//recheck every second
         setTimeout(checkForChanges, 1000);
@@ -142,7 +175,7 @@ function getReasonString(code){
 		case 1: return "SCAMMER"; break;
 		case 2: return "SKETCHY"; break;
 		case 3: return "TROLL"; break;
-		case 4: return "COMPROMISED ACCOUNT"; break;
+		case 4: return "COMPROMISED"; break;
 		default: return "UNKNOWN"; break;
 	}
 }
