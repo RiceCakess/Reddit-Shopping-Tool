@@ -17,6 +17,7 @@
     vertical-align: middle;
     border-radius: 4px;
 	margin-top: -2px;
+	margin-left: 4px;
 	text-decoration: none !important;
 }
 
@@ -32,6 +33,8 @@
 	margin-top: -10px;
     position: absolute;
     z-index: 1;
+	font-weight: 600;
+	white-space: pre-wrap;
 }
 .infobox > strong{
 	font-weight: 700 !important;

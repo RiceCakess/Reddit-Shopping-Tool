@@ -4,7 +4,7 @@ var version = "1.3.0";
 var defaultoptions = 
 {
 	"updateTime": 1440, 
-	"neSupport": 0,
+	"neSupport": 1,
 	"infobox": 1,
 	"subreddits": ["hardwareswap","gameswap", "mechmarket", "hardwareswapaustralia","phoneswap","detailswap","hardwareswapuk","hardwareswapeu","canadianhardwareswap","steamgameswap","avexchange", "trade","ecigclassifieds","borrow", "starcitizen_trades","rotmgtradingpost","care","mynintendotrades","slavelabour","indiegameswap","appleswap","redditbay","giftcardexchange"]
 };
@@ -13,14 +13,11 @@ $(document).ready(function(){
 	//check if website is reddit and not options page
 	if (window.location.href.indexOf("reddit") != -1){
 		//load options before running rest of script
-		
-		/*
-		for chrome version only:
-		chrome.storage.sync.get({
-		*/
+		console.log(chrome.storage);
 		chrome.storage.local.get({
 			options: defaultoptions
 		 }, function(data) {
+				
 				options = data.options;
 				checkForUpdate();
 				labelUsers();
@@ -46,8 +43,8 @@ function labelUsers(){
 	//create an array for users that need to be checked
 	$( ".author" ).each(function() {
 		for(var index in options.subreddits){
-			//check if post is from trading subreddits
-			if($(this).parents('.thing').attr("data-subreddit") === options.subreddits[index])
+			//check if post is from trading subreddits or is inbox
+			if($(this).parents('.thing').attr("data-subreddit") === options.subreddits[index] || window.location.href.indexOf("reddit.com/message") != -1)
 				uservis[$(this).text().toLowerCase()] = "";
 		}
 	});
@@ -70,13 +67,20 @@ function labelUsers(){
 			var userData = uservis[$(this).text().toLowerCase()];
 			if(userData){
 				//translate bancode and add badge next to their name
-				var html = " <a href='javascript:;' class='rst-banned-" + userData.code + " rst-badge'>" + getReasonString(userData.code) + "</a>";
+				var badge = $("<a></a>")
+				badge.addClass("rst-banned-" + userData.code);
+				badge.addClass("rst-badge");
+				badge.text(getReasonString(userData.code));
+				badge.attr('href',"javascript:;");
+				$(this).append(badge);
 				
 				//if infobox is enabled, append next to name
-				if(options['infobox'] == 1)
-					html += "<span class='infobox'><strong>Reported by:</strong> " + userData.subreddit + "\n\r" + " <strong>Reason:</strong> " + userData.reason + " </span>";
-				
-				$(this).after(html);
+				if(options['infobox'] == 1){
+					var tooltip = $('<span></span>');
+					tooltip.addClass("infobox");
+					tooltip.text("Reported by: " +  userData.subreddit + "\n\r" + " Reason: " + userData.reason);
+					$(this).append(tooltip);
+				}
 			}
 		});
 		$(".rst-badge").click(function(){

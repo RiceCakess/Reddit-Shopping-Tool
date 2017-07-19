@@ -3,9 +3,6 @@
 var loaded = false;
 $(document).ready(function(){
 	//load saved options, or use defaults
-	 /*
-	 chrome.storage.sync.get({ 
-	 */
 	 chrome.storage.local.get({ 
 		options: defaultoptions
 	 }, function(data) {
@@ -41,7 +38,7 @@ function loadUsers(){
 		for (var name in users){
 			if (users.hasOwnProperty(name)) {
 				//add to textarea display
-				$(".banned-users").append(name + " - " + getReasonString(users[name].code) + " \"" + users[name].reason + "\" " + users[name].subreddit + "\r\n");
+				$(".banned-users").append(document.createTextNode(name + " - " + getReasonString(users[name].code) + " \"" + users[name].reason + "\" " + users[name].subreddit + "\r\n"));
 				
 			}
 		}
@@ -61,9 +58,7 @@ function initBtn(){
 		alert("Updated");
 	});
 	$("#setdefault").click(function(){
-		/*
-		chrome.storage.sync.set({
-		*/
+		
 		chrome.storage.local.set({
 			options: defaultoptions
 		}, function() {
@@ -105,9 +100,6 @@ function initBtn(){
 		optionset[optionname] = value;
 		
 		//save array to chrome sync'd storage
-		/*
-		chrome.storage.sync.set({
-		*/
 		chrome.storage.local.set({
 			options: optionset
 		}, function() {

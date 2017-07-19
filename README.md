@@ -43,4 +43,7 @@ Version 1.3.0 / 2017-1-28
 * Added contact link
 * Added support for Firefox
 * Minor bug fixes
+
+Version 1.3.1 / 2017-2-11
+* Fixed bug where extension was not running in inbox
 </pre>
