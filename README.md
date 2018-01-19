@@ -9,7 +9,8 @@ Reddit Shopping Tool is an extension that automatically identifies any users tha
 <hr>
 
 <strong>Change Log</strong>
-Version 1.0.0 / 2016-6-13
+
+**Version 1.0.0 / 2016-6-13**
 * Initial release
 
 **Version 1.0.1 / 2016-6-13**
