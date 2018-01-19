@@ -38,8 +38,14 @@ Version 1.3.0 / 2017-1-28
 Version 1.3.1 / 2017-2-11
 * Fixed bug where extension was not running in inbox
 
-Version 1.3.1 / 2017-7-7
+Version 1.3.2 / 2017-7-7
 * Fixed issues with dependencies
 * Switched to local storage for Firefox support
 * Made changes to fix unsanitized data
 * Changed name to "Reddit Scam Labeler", because the other title was misleading (according to Chrome)
+
+Version 1.4.0 / 2018-1-19
+* Added support for new profile page
+* Checking new scammer list at https://www.reddit.com/r/hardwareswap/wiki/banlist
+* Added option to check for sketchy users (disabled by default)
+* General improvements and bug fixes

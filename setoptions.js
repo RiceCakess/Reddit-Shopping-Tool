@@ -54,11 +54,15 @@ function initBtn(){
 		}
 	});
 	$("#forceupdate").click(function(){
-		updateList();
-		alert("Updated");
+		$(this).text("Updating..");
+		$(this).addClass("disabled");
+		updateList(function(){
+			alert("Updated");
+			$("#forceupdate").text("Force Ban List Update");
+			$("#forceupdate").removeClass("disabled");
+		});
 	});
 	$("#setdefault").click(function(){
-		
 		chrome.storage.local.set({
 			options: defaultoptions
 		}, function() {
