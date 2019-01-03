@@ -3,7 +3,7 @@
   "name": "Reddit Scam Labeler",
   "short_name": "RSL",
   "description": "Automatically labels users based on the Universal Scammers List",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "icons": { "16": "icon/icon16.png",
            "48": "icon/icon48.png",
           "128": "icon/icon128.png" },

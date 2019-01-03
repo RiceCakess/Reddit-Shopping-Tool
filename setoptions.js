@@ -1,4 +1,11 @@
-
+var defaultoptions = 
+{
+	"updateTime": 1440, 
+	"neSupport": 1,
+	"infobox": 1,
+	"labelSketchy":0,
+	"subreddits": ["hardwareswap","gameswap", "mechmarket", "hardwareswapaustralia","phoneswap","detailswap","hardwareswapuk","hardwareswapeu","canadianhardwareswap","steamgameswap","avexchange", "trade","ecigclassifieds","borrow", "starcitizen_trades","rotmgtradingpost","care","mynintendotrades","slavelabour","indiegameswap","appleswap","redditbay","giftcardexchange"]
+};
 //to ensure it only loads once
 var loaded = false;
 $(document).ready(function(){
@@ -32,8 +39,8 @@ function loadUsers(){
 	chrome.storage.local.get(['users','timestamp'], function(data){
 		//loop through banned users
 		users = JSON.parse(data.users);
-		var date = (Date.now() - data.timestamp)/1000;
-		var ago = (Math.round(date/86400) > 0) ? Math.round(date/86400) + " days ago" : Math.round(date/3600) + " hours ago";
+		var date = (Date.now() - data.timestamp)/1000; //seconds
+		var ago = (Math.floor(date/86400) > 0) ? Math.floor(date/86400) + " days ago" : Math.round(date/3600) + " hours ago";
 		$("#lastUpdate").html("Last Updated: " + ago);
 		for (var name in users){
 			if (users.hasOwnProperty(name)) {

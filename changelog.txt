@@ -49,3 +49,9 @@ Version 1.4.0 / 2018-1-19
 * Checking new scammer list at https://www.reddit.com/r/hardwareswap/wiki/banlist
 * Added option to check for sketchy users (disabled by default)
 * General improvements and bug fixes
+
+Version 1.5.0 / 2019-1-2
+* Created source https://www.reddit.com/r/RSTList/wiki/banlist which contains universalscammerlist.com data 
+* Checking the new source
+* Removed options for hourly, and 6 hours in update frequency
+* General improvements

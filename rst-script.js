@@ -106,19 +106,24 @@ function labelUsers(){
 function updateList(callback){
 	var users = {};
 	//grab the ban list page as string
-	var p1 = $.get("https://www.reddit.com/r/hardwareswap/wiki/banlist").done(
+	var p1 = $.get("https://www.reddit.com/r/UniversalScammerList/wiki/banlist").done(
 		function(data) {
 			//write array, time, and version to local storage
 			$.extend(users, getUsersFromList(data,""));
 		}
 	);
-	var p2 = $.get("https://www.reddit.com/r/UniversalScammerList/wiki/banlist").done(
+	var p2 = $.get("https://www.reddit.com/r/hardwareswap/wiki/banlist").done(
 		function(data) {
 			$.extend(users, getUsersFromList(data,""));
 		}
 	);
-	Promise.all([p1,p2]).then(function(){
-		console.log(users);
+	var p3 = $.get("https://www.reddit.com/r/RSTList/wiki/banlist").done(
+		function(data) {
+			$.extend(users, getUsersFromList(data,""));
+		}
+	);
+	Promise.all([p1,p2,p3]).then(function(){
+		//console.log(users);
 		chrome.storage.local.set({"users" : JSON.stringify(users)});
 		chrome.storage.local.set({"timestamp" : Date.now()});
 		chrome.storage.local.set({"version" : version});
