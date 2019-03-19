@@ -1,18 +1,17 @@
 var uservis = {};
 var options = {};
-var version = "1.4.0";
+var version = "1.5.1";
 var defaultoptions = 
 {
-	"updateTime": 1440, 
+	"updateTime": 360, 
 	"neSupport": 1,
 	"infobox": 1,
-	"labelSketchy":0,
-	"subreddits": ["hardwareswap","gameswap", "mechmarket", "hardwareswapaustralia","phoneswap","detailswap","hardwareswapuk","hardwareswapeu","canadianhardwareswap","steamgameswap","avexchange", "trade","ecigclassifieds","borrow", "starcitizen_trades","rotmgtradingpost","care","mynintendotrades","slavelabour","indiegameswap","appleswap","redditbay","giftcardexchange"]
+	"labelSketchy":0
 };
 var lastInfoBox;
 $(document).ready(function(){
 	//check if website is reddit and not options page
-	if (window.location.href.indexOf("reddit") != -1){
+	if (window.location.hostname.indexOf("reddit.com") != -1){
 		//load options before running rest of script
 		//console.log(chrome.storage);
 		chrome.storage.local.get({
@@ -30,11 +29,8 @@ function checkForUpdate(){
 	//check last update timestamp
 	chrome.storage.local.get(['timestamp','version'], function(data){
 		//update list if list is X days old or empty or extension was updated
-		if(data.timestamp == null || 
-			data.version == null || 
-			(options["updateTime"] != -1 &&  (Date.now() - data.timestamp)/1000 > options.updateTime*60) ||
-			data.version !== version)
-		{
+		if(data.timestamp === null || data.version === null || data.version !== version ||
+		( options["updateTime"] !== -1 && ( ( Date.now() - data.timestamp )/1000 ) > ( options.updateTime * 60 ) ) ) {
 			updateList();
 		}
 	});
@@ -42,21 +38,13 @@ function checkForUpdate(){
 function labelUsers(){
 	//create an array for users that need to be checked
 	$( ".author, .Post__username, .Comment__author, .Post__authorLink" ).each(function() {
-		if(uservis[$(this).text().toLowerCase()] == null){
-			if(window.location.href.indexOf("reddit.com/message") != -1 || window.location.href.indexOf("reddit.com/user/") != -1){
-				uservis[$(this).text().toLowerCase()] = "";
-			}
-			else
-				for(var index in options.subreddits){
-					if($(this).parents('.thing').attr("data-subreddit") === options.subreddits[index]){
-						uservis[$(this).text().toLowerCase()] = "";
-					}
-				}
+		if(uservis[$(this).text().toLowerCase()] ===	 null){
+			uservis[$(this).text().toLowerCase()] = "";
 		}
 	});
 	chrome.storage.local.get('users', function(data){
 		//loop through banned users and check if uservis contains any banned users
-		users = JSON.parse(data.users);
+		users = data.users;
 		for (var name in users){
 			//set as banned if not already on the list
 			if (users.hasOwnProperty(name) && uservis[name.toLowerCase()] <= 0) {
@@ -103,21 +91,23 @@ function labelUsers(){
 		});
 	});
 }
+
+var sources = ["https://www.reddit.com/r/UniversalScammerList/wiki/banlist", "https://www.reddit.com/r/hardwareswap/wiki/banlist", "https://www.reddit.com/r/RSTList/wiki/banlist"];
 function updateList(callback){
-	var users = {};
+	/*var users = {};
 	//grab the ban list page as string
-	var p1 = $.get("https://www.reddit.com/r/UniversalScammerList/wiki/banlist").done(
+	var p1 = $.get().done(
 		function(data) {
 			//write array, time, and version to local storage
 			$.extend(users, getUsersFromList(data,""));
 		}
 	);
-	var p2 = $.get("https://www.reddit.com/r/hardwareswap/wiki/banlist").done(
+	var p2 = $.get().done(
 		function(data) {
 			$.extend(users, getUsersFromList(data,""));
 		}
 	);
-	var p3 = $.get("https://www.reddit.com/r/RSTList/wiki/banlist").done(
+	var p3 = $.get(").done(
 		function(data) {
 			$.extend(users, getUsersFromList(data,""));
 		}
@@ -130,8 +120,23 @@ function updateList(callback){
 		console.log("[RST] Ban List Updated!");
 		if(callback)
 			callback();
+	});*/
+	var users = {};
+	Promise.all( sources.map(function( v, i ) {
+		return $.get( v );
+	})).then(function(res) {
+		$.each(res,function( i, v ){
+			$.extend(users, getUsersFromList(v,""));
+		});
+		//console.log(users.length);
+		chrome.storage.local.set({"users": users});
+		chrome.storage.local.set({"timestamp": Date.now()});
+		chrome.storage.local.set({"version": version});
+		//console.log("[RST] Ban List Updated!");
+		if( !!callback ) {
+			callback();
+		}
 	});
-	
 }
 function getUsersFromList(data, defaultSub){
 	//string manipulation to get only names of banned users and reason

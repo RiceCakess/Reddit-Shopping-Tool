@@ -1,10 +1,9 @@
 var defaultoptions = 
 {
-	"updateTime": 1440, 
+	"updateTime": 360, 
 	"neSupport": 1,
 	"infobox": 1,
-	"labelSketchy":0,
-	"subreddits": ["hardwareswap","gameswap", "mechmarket", "hardwareswapaustralia","phoneswap","detailswap","hardwareswapuk","hardwareswapeu","canadianhardwareswap","steamgameswap","avexchange", "trade","ecigclassifieds","borrow", "starcitizen_trades","rotmgtradingpost","care","mynintendotrades","slavelabour","indiegameswap","appleswap","redditbay","giftcardexchange"]
+	"labelSketchy":0
 };
 //to ensure it only loads once
 var loaded = false;
@@ -38,7 +37,7 @@ function loadUsers(){
 	checkForUpdate();
 	chrome.storage.local.get(['users','timestamp'], function(data){
 		//loop through banned users
-		users = JSON.parse(data.users);
+		users = data.users;
 		var date = (Date.now() - data.timestamp)/1000; //seconds
 		var ago = (Math.floor(date/86400) > 0) ? Math.floor(date/86400) + " days ago" : Math.round(date/3600) + " hours ago";
 		$("#lastUpdate").html("Last Updated: " + ago);
@@ -82,10 +81,6 @@ function initBtn(){
 		});
 		window.location.reload();
 	});
-	$(".add-subreddit-btn").click(function(){
-		$("#subreddits").append("<li class='list-group-item rst-sub'>/r/" + $(".add-subreddit-name").val() + "<button id='delete' class='btn btn-danger delete-btn'>Delete</button></li>");
-		$(".add-subreddit-name").val('');
-	});
 	
 	$("#save").click(function() {
 		var optionset = {};
@@ -96,20 +91,6 @@ function initBtn(){
 			var optionname = $(this).attr('id');
 			optionset[optionname] = value;
 		});
-		var newList = [];
-		//get the list of subreddits
-		var children = $("#subreddits").children();
-		$.each(children,function(key,value){
-			//filter out delete button
-			var str = $(value).html().replace('<button id="delete" class="btn btn-danger delete-btn">Delete</button>','');
-			//add subreddit to list
-			newList.push(str.replace('/r/',''));
-		});
-		//add list to options array
-		var value = newList;
-		var optionname = "subreddits";
-		optionset[optionname] = value;
-		
 		//save array to chrome sync'd storage
 		chrome.storage.local.set({
 			options: optionset

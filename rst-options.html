@@ -35,15 +35,13 @@
 					<div class="option-box">
 						<label><h2>Update Ban List:</h2></label>
 						<select id="updateTime" class="form-control rst-option" style="width: 400px;">
+							<option value="60">Every 1 Hours</option>
+							<option value="180">Every 3 Hours</option>
+							<option value="360" selected="selected">Every 6 Hours</option>
 							<option value="720">Every 12 Hours</option>
-							<option value="1440" selected="selected">Every Day</option>
+							<option value="1440">Every Day</option>
 							<option value="2880">Every 2 Days</option>
 							<option value="4320">Every 3 Days</option>
-							<option value="5760">Every 4 Days</option>
-							<option value="7200">Every 5 Days</option>
-							<option value="10080">Every Week</option>
-							<option value="20160">Every 2 Weeks</option>
-							<option value="43200">Every Month</option>
 							<option value="-1">Never</option>
 						</select>
 					</div>
@@ -67,20 +65,6 @@
 							<option value="0">Disabled</option>
 							<option value="1" selected="selected">Enabled</option>
 						</select>
-					</div>
-					<div class="option-box">
-						<label><h2>Subreddits</h2></label>
-						<ul class="list-group" id="subreddits">
-							
-						</ul>
-						<div class="input-group">
-							<span class="input-group-addon" id="basic-addon1">/r/</span>
-						    
-							<input type="text" class="form-control add-subreddit-name" placeholder="Subreddit Name...">
-							<span class="input-group-btn">
-								<button class="btn btn-default add-subreddit-btn" type="button">Add Subreddit</button>
-							</span>
-						</div>
 					</div>
 				</div>
 				<div id="data" class="tab-pane fade">
