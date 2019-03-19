@@ -94,33 +94,6 @@ function labelUsers(){
 
 var sources = ["https://www.reddit.com/r/UniversalScammerList/wiki/banlist", "https://www.reddit.com/r/hardwareswap/wiki/banlist", "https://www.reddit.com/r/RSTList/wiki/banlist"];
 function updateList(callback){
-	/*var users = {};
-	//grab the ban list page as string
-	var p1 = $.get().done(
-		function(data) {
-			//write array, time, and version to local storage
-			$.extend(users, getUsersFromList(data,""));
-		}
-	);
-	var p2 = $.get().done(
-		function(data) {
-			$.extend(users, getUsersFromList(data,""));
-		}
-	);
-	var p3 = $.get(").done(
-		function(data) {
-			$.extend(users, getUsersFromList(data,""));
-		}
-	);
-	Promise.all([p1,p2,p3]).then(function(){
-		//console.log(users);
-		chrome.storage.local.set({"users" : JSON.stringify(users)});
-		chrome.storage.local.set({"timestamp" : Date.now()});
-		chrome.storage.local.set({"version" : version});
-		console.log("[RST] Ban List Updated!");
-		if(callback)
-			callback();
-	});*/
 	var users = {};
 	Promise.all( sources.map(function( v, i ) {
 		return $.get( v );
@@ -128,11 +101,10 @@ function updateList(callback){
 		$.each(res,function( i, v ){
 			$.extend(users, getUsersFromList(v,""));
 		});
-		//console.log(users.length);
 		chrome.storage.local.set({"users": users});
 		chrome.storage.local.set({"timestamp": Date.now()});
 		chrome.storage.local.set({"version": version});
-		//console.log("[RST] Ban List Updated!");
+		console.log("[RST] Ban List Updated!");
 		if( !!callback ) {
 			callback();
 		}
