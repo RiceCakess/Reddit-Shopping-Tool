@@ -22,7 +22,6 @@ $(document).ready(function(){
 				labelUsers();
 				checkForChanges();
 		});
-		
 	}
 });
 function checkForUpdate(){
@@ -37,27 +36,29 @@ function checkForUpdate(){
 }
 function labelUsers(){
 	//create an array for users that need to be checked
-	$( ".author, .Post__username, .Comment__author, .Post__authorLink" ).each(function() {
-		if(uservis[$(this).text().toLowerCase()] ===	 null){
+	$( ".author, .Post__username, .Comment__author, .Post__authorLink, .hrnLZO" ).each(function() {
+		if(uservis[$(this).text().toLowerCase()] == null){
 			uservis[$(this).text().toLowerCase()] = "";
 		}
 	});
 	chrome.storage.local.get('users', function(data){
 		//loop through banned users and check if uservis contains any banned users
-		users = data.users;
-		for (var name in users){
+		var dbUsers = data.users;
+		for (var name in uservis){
 			//set as banned if not already on the list
-			if (users.hasOwnProperty(name) && uservis[name.toLowerCase()] <= 0) {
+			if (uservis[name.toLowerCase()] <= 0 && dbUsers.hasOwnProperty(name)) {
 				//set user info in uservis, and label sketchy users if enabled
-				if(options['labelSketchy'] == 1 || users[name].code != 2)
-					uservis[name.toLowerCase()] = users[name];
+				if(options['labelSketchy'] == 1 || dbUsers[name].code != 2){
+					uservis[name.toLowerCase()] = dbUsers[name];
+				}
 			}
 		}
 		//automoderator exception
 		uservis["automoderator"] = "";
 		
 		//loop through all name tags and set them as banned/sketchy, if any
-		$( ".author, .Post__username, .Comment__author, .Post__authorLink" ).each(function() {
+		$( ".author, .Post__username, .Comment__author, .Post__authorLink, .hrnLZO" ).each(function() {
+			
 			//check if user is on the list
 			var userData = uservis[$(this).text().toLowerCase()];
 			if(userData){
@@ -92,7 +93,11 @@ function labelUsers(){
 	});
 }
 
-var sources = ["https://www.reddit.com/r/UniversalScammerList/wiki/banlist", "https://www.reddit.com/r/hardwareswap/wiki/banlist", "https://www.reddit.com/r/RSTList/wiki/banlist"];
+var sources = [
+	"https://www.reddit.com/r/UniversalScammerList/wiki/banlist", 
+	"https://www.reddit.com/r/hardwareswap/wiki/banlist", 
+	"https://www.reddit.com/r/RSTList/wiki/banlist"
+];
 function updateList(callback){
 	var users = {};
 	Promise.all( sources.map(function( v, i ) {
@@ -102,6 +107,7 @@ function updateList(callback){
 			$.extend(users, getUsersFromList(v,""));
 		});
 		chrome.storage.local.set({"users": users});
+		console.log(users);
 		chrome.storage.local.set({"timestamp": Date.now()});
 		chrome.storage.local.set({"version": version});
 		console.log("[RST] Ban List Updated!");
