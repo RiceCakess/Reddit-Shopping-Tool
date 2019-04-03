@@ -12,16 +12,11 @@ $(document).ready(function(){
 	 chrome.storage.local.get({ 
 		options: defaultoptions
 	 }, function(data) {
+		 options = data.options;
 		 for (var optionname in data.options){
 			if (data.options.hasOwnProperty(optionname)) {
 				//set defaults
-				if(optionname === "subreddits"){
-					for(var index in data.options[optionname])
-						$("#" + optionname).append("<li class='list-group-item rst-sub'>/r/" + data.options[optionname][index] + "<button id='delete' class='btn btn-danger delete-btn'>Delete</button></li>");
-				}
-				else{
-					$("#" + optionname).val(data.options[optionname]).change();
-				}
+				$("#" + optionname).val(data.options[optionname]).change();
 				//initialize delete button, has to be in callback instead of document.ready
 				$(".delete-btn").click(function(){
 					$(this).parent().remove();
@@ -62,8 +57,8 @@ function initBtn(){
 	$("#forceupdate").click(function(){
 		$(this).text("Updating..");
 		$(this).addClass("disabled");
-		updateList(function(){
-			alert("Updated");
+		updateList(function(msg){
+			alert(msg);
 			$("#forceupdate").text("Force Ban List Update");
 			$("#forceupdate").removeClass("disabled");
 		});
@@ -103,5 +98,6 @@ function initBtn(){
 			  status.html('');
 			}, 5000);
 		});
+		option = optionset;
 	});
 }

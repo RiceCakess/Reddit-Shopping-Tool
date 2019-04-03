@@ -1,6 +1,6 @@
 var uservis = {};
 var options = {};
-var version = "1.5.1";
+var version = "1.5.2";
 var defaultoptions = 
 {
 	"updateTime": 360, 
@@ -10,19 +10,18 @@ var defaultoptions =
 };
 var lastInfoBox;
 $(document).ready(function(){
-	//check if website is reddit and not options page
-	if (window.location.hostname.indexOf("reddit.com") != -1){
-		//load options before running rest of script
-		//console.log(chrome.storage);
-		chrome.storage.local.get({
-			options: defaultoptions
-		 }, function(data) {
-				options = data.options;
-				checkForUpdate();
-				labelUsers();
-				checkForChanges();
-		});
-	}
+	//load options before running rest of script
+	//console.log(chrome.storage);
+	chrome.storage.local.get({
+		options: defaultoptions
+	 }, function(data) {
+		options = data.options;
+		if (window.location.hostname.indexOf("reddit.com") != -1 ){
+			checkForUpdate();
+			labelUsers();
+			checkForChanges();
+		}
+	});
 });
 function checkForUpdate(){
 	//check last update timestamp
@@ -94,25 +93,28 @@ function labelUsers(){
 }
 
 var sources = [
-	"https://www.reddit.com/r/UniversalScammerList/wiki/banlist", 
-	"https://www.reddit.com/r/hardwareswap/wiki/banlist", 
-	"https://www.reddit.com/r/RSTList/wiki/banlist"
+	"https://old.reddit.com/r/hardwareswap/wiki/banlist",
+	"https://old.reddit.com/r/RSTList/wiki/banlist",  
+	"https://old.reddit.com/r/RSTList/wiki/sketchylist"
 ];
 function updateList(callback){
 	var users = {};
-	Promise.all( sources.map(function( v, i ) {
-		return $.get( v );
+	Promise.all( sources.slice(0, options["labelSketchy"] == 1 ? 3 : 2).map(function( src, index ) {
+		return $.get( src );
 	})).then(function(res) {
-		$.each(res,function( i, v ){
-			$.extend(users, getUsersFromList(v,""));
+		var msg = "Ban List Updated!";
+		$.each(res,function( i, data ){
+			if(data)
+				$.extend(users, getUsersFromList(data,""));
+			else
+				msg = "Error, failed to get data";
 		});
 		chrome.storage.local.set({"users": users});
-		console.log(users);
 		chrome.storage.local.set({"timestamp": Date.now()});
 		chrome.storage.local.set({"version": version});
-		console.log("[RST] Ban List Updated!");
+		//console.log("[RST] " + msg);
 		if( !!callback ) {
-			callback();
+			callback(msg);
 		}
 	});
 }

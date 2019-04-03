@@ -1,3 +1,8 @@
+Version 1.5.2 / 2019-4-2
+* Fixed source links
+* Replaced r/UniversalScammerList source with r/RSTList
+* Clean up from last update
+
 Version 1.5.1 / 2019-3-18
 * Fixed bug with manifest/permission
 * Removed subreddit restrict option
