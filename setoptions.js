@@ -1,8 +1,6 @@
 var defaultoptions = 
 {
 	"updateTime": 360, 
-	"neSupport": 1,
-	"infobox": 1,
 	"labelSketchy":0
 };
 //to ensure it only loads once
@@ -39,7 +37,7 @@ function loadUsers(){
 		for (var name in users){
 			if (users.hasOwnProperty(name)) {
 				//add to textarea display
-				$(".banned-users").append(document.createTextNode(name + " - " + getReasonString(users[name].code) + " \"" + users[name].reason + "\" " + users[name].subreddit + "\r\n"));
+				$(".banned-users").append(document.createTextNode(name + " - " + users[name] + "\r\n"));
 				
 			}
 		}

@@ -1,17 +1,14 @@
 var uservis = {};
 var options = {};
-var version = "1.5.2";
+var version = "1.5.3";
 var defaultoptions = 
 {
 	"updateTime": 360, 
-	"neSupport": 1,
-	"infobox": 1,
 	"labelSketchy":0
 };
 var lastInfoBox;
-$(document).ready(function(){
-	//load options before running rest of script
-	//console.log(chrome.storage);
+//load options before running rest of script
+$( document ).ready(()=>{
 	chrome.storage.local.get({
 		options: defaultoptions
 	 }, function(data) {
@@ -20,6 +17,7 @@ $(document).ready(function(){
 			checkForUpdate();
 			labelUsers();
 			checkForChanges();
+			
 		}
 	});
 });
@@ -35,7 +33,7 @@ function checkForUpdate(){
 }
 function labelUsers(){
 	//create an array for users that need to be checked
-	$( ".author, .Post__username, .Comment__author, .Post__authorLink, .hrnLZO" ).each(function() {
+	$( ".author, .Post__username, .Comment__author, .Post__authorLink, a[href^='/user/']" ).each(function() {
 		if(uservis[$(this).text().toLowerCase()] == null){
 			uservis[$(this).text().toLowerCase()] = "";
 		}
@@ -56,46 +54,27 @@ function labelUsers(){
 		uservis["automoderator"] = "";
 		
 		//loop through all name tags and set them as banned/sketchy, if any
-		$( ".author, .Post__username, .Comment__author, .Post__authorLink, .hrnLZO" ).each(function() {
+		$( ".author, .Post__username, .Comment__author, .Post__authorLink, a[href^='/user/']" ).each(function() {
 			
 			//check if user is on the list
 			var userData = uservis[$(this).text().toLowerCase()];
 			if(userData){
 				//translate bancode and add badge next to their name
-				var badge = $("<a></a>")
-				badge.addClass("rst-banned-" + userData.code);
+				var badge = $("<a></a>");
+				badge.addClass("rst-banned-" + userData);
 				badge.addClass("rst-badge");
-				badge.text(getReasonString(userData.code));
-				badge.attr('href',"javascript:;");
+				badge.text(userData);
+				badge.attr('href',"https://universalscammerlist.com/search.php?username=" + $(this).text().replace("/u/",""));
 				$(this).append(badge);
-				
-				//if infobox is enabled, append next to name
-				if(options['infobox'] == 1){
-					var tooltip = $('<span></span>');
-					tooltip.addClass("infobox");
-					tooltip.text("Reported by: " +  userData.subreddit + "\n\r" + " Reason: " + userData.reason);
-					$(this).append(tooltip);
-				}
 			}
-		});
-		$(".rst-badge").click(function(){
-			//on infobox click, make it visible
-			var infobox = $(this).next(".infobox");
-			infobox.css("visibility", (infobox.css("visibility") == "hidden") ? "visible" : "hidden");
-			
-			//make sure that only one infobox is open
-			if(lastInfoBox && !(infobox.is(lastInfoBox))){
-				lastInfoBox.css("visibility", "hidden"); 
-			}
-			lastInfoBox = infobox;
 		});
 	});
 }
 
 var sources = [
-	"https://old.reddit.com/r/hardwareswap/wiki/banlist",
-	"https://old.reddit.com/r/RSTList/wiki/banlist",  
-	"https://old.reddit.com/r/RSTList/wiki/sketchylist"
+	"https://reddit.com/r/hardwareswap/wiki/banlist.json",
+	"https://reddit.com/r/RSTList/wiki/banlist.json",  
+	"https://reddit.com/r/RSTList/wiki/sketchylist.json"
 ];
 function updateList(callback){
 	var users = {};
@@ -103,95 +82,66 @@ function updateList(callback){
 		return $.get( src );
 	})).then(function(res) {
 		var msg = "Ban List Updated!";
+		var error = false;
 		$.each(res,function( i, data ){
 			if(data)
-				$.extend(users, getUsersFromList(data,""));
-			else
+				$.extend(users, getUsersFromJSON(data));
+			else{
 				msg = "Error, failed to get data";
+				error = true;
+			}
 		});
-		chrome.storage.local.set({"users": users});
-		chrome.storage.local.set({"timestamp": Date.now()});
-		chrome.storage.local.set({"version": version});
-		//console.log("[RST] " + msg);
+		if(!error){
+			chrome.storage.local.set({"users": users});
+			chrome.storage.local.set({"timestamp": Date.now()});
+			chrome.storage.local.set({"version": version});
+		}
+		console.log("[RST] " + msg);
 		if( !!callback ) {
 			callback(msg);
 		}
 	});
 }
-function getUsersFromList(data, defaultSub){
-	//string manipulation to get only names of banned users and reason
-	var src = (data.split('<textarea readonly class="source" rows="20" cols="20">')[1]).replace("</textarea>","");
-	var users = src.split("*");
-	var jusers = {};
-	users.forEach(function(entry){
-		//isolate username
-		var userDataSplit = entry.split("#");
-		if(name != "" && entry.length < 150 && userDataSplit.length > 1){
-			var name = (userDataSplit[0]).trim().replace("/u/","").split(" ");
-			var name = name[0];
-			
-			var code = 1;
-			//1 = scammer
-			//2 = sketchy
-			//3 = troll
-			//4 = compromised
-			
-			//split string into three data points: code, reason, subreddit
-			var reason = userDataSplit[1].toLowerCase();
-			
-			if(reason.includes("sketchy"))
-				code = 2;
-			else if(reason.includes("troll"))
-				code = 3;
-			else if(reason.includes("compromise"))
-				code = 4;
-			else if(reason.includes("scammer"))
-				code = 1;
-			else
-				code = 0;
-			
-			//clean up everything else in the string, leaving the reason
-			var reason = entry.replace(/(#\S+)/gi,"");
-			reason = reason.replace("/u/" + name,"");
-			var regExp = /\(([^)]+)\)/;
-			var match = regExp.exec(reason);
-			var subreddit = defaultSub;
-			if(match)
-				subreddit = match[1].replace("banned by","").trim();
-			
-			reason = reason.replace(/\(([^)]+)\)/,"").replace("\n","").replace("/", " ").replace("other:","").trim();
-			
-			//add to array with data
-			jusers[name.toLowerCase()] = {code, reason, subreddit};
-		}	
+function getUsersFromJSON(data){
+	var rx = /\*\s+\/u\/([^\s#]+)(\s+|)(#[a-z0-9]+)?/;
+	if( typeof data === 'undefined' || !data.data || !data.data.content_md ) {
+		return {};
+	}
+	var result = data.data.content_md.match( new RegExp( rx, 'gi') ) || [];
+	result = result.map(function(i) {
+		return i.match( new RegExp( rx, 'i' ) );
 	});
-	return jusers;
+	var ret = {};
+	$.each(result,function(i,v){
+		if( typeof v[3] === 'undefined' ) {
+			v[3] = '#sketchy';
+		}
+		v[3] = v[3].slice(1).toLowerCase().replace('sktechy','sketchy');
+		if( v[3].indexOf('ske') === 0 ) {
+			v[3] = 'sketchy';
+		}
+		if( v[3].indexOf('spa') === 0 ) {
+			v[3] = 'spammer';
+		}
+		if( v[3].indexOf('sca') === 0 ) {
+			v[3] = 'scammer';
+		}
+		if( ['scammer','troll','sketchy','bot','compromised','rule','slavelabour','investigating','impersonator','spammer'].indexOf( v[3] ) === -1 ) {
+			v[3] = 'sketchy';
+		}
+		ret[v[1].toLowerCase()] = v[3];
+	});
+	return ret;
 }
-//neverending support 
-var pagenum = 0;
+//Checks for changes in the page, in dynamically loaded content such as infinite scroll
+var lastcount = 0;
 function checkForChanges()
 {
-	if(options['neSupport'] == 1){
-		//check if a new page marker appeared
-		if($('.NERPageMarker').length != pagenum){
-			//set all 
-			pagenum = $('.NERPageMarker').length;
-			labelUsers();
-		}
-		//recheck every second
-        setTimeout(checkForChanges, 1000);
+	var namecounts = $( ".author, .Post__username, .Comment__author, .Post__authorLink, a[href^='/user/']" ).length;
+	if(lastcount != namecounts){
+		lastcount = namecounts;
+		labelUsers();
 	}
-	else{
-	console.log("[RST] Never Ending Support disabled! Enable it in the options!");
-	}
-}
-function getReasonString(code){
-	//translate bancode
-	switch(code){
-		case 1: return "SCAMMER"; break;
-		case 2: return "SKETCHY"; break;
-		case 3: return "TROLL"; break;
-		case 4: return "COMPROMISED"; break;
-		default: return "UNKNOWN"; break;
-	}
+	//recheck every two second
+	setTimeout(checkForChanges, 2000);
 }

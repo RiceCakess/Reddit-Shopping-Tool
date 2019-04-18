@@ -1,8 +1,9 @@
-.rst-banned-1,.rst-banned-4{
+.rst-banned-scammer,.rst-banned-compromised{
 	background-color: red !important;
 }
-.rst-banned-0,.rst-banned-2,.rst-banned-3 {
-	background-color: #f39c12 !important;
+a[class^="rst-banned-"] {
+	background-color: #f39c12;
+	text-transform: uppercase;
 }
 .rst-badge {
 	display: inline-block;

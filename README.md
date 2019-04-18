@@ -10,34 +10,46 @@ Reddit Shopping Tool is an extension that automatically identifies any users tha
 
 <strong>Change Log</strong>
 
-**Version 1.5.1 / 2019-3-18**
+Version 1.5.3 / 2019-4-18
+* Replaced source links to comply with CORS
+* Fixed bug with updating the list
+* Removed tooltip/info box, and replaced with link to universalscammerlist.com
+* Added support for old and new reddit
+* General bug fixes
+
+Version 1.5.2 / 2019-4-2
+* Fixed source links
+* Replaced r/UniversalScammerList source with r/RSTList
+* Clean up from last update
+
+Version 1.5.1 / 2019-3-18
 * Fixed bug with manifest/permission
 * Removed subreddit restrict option
 * Changed ban list update intervals
 * General bug fixes
 
-**Version 1.5.0 / 2019-1-2**
+Version 1.5.0 / 2019-1-2
 * Created source https://www.reddit.com/r/RSTList/wiki/banlist which contains universalscammerlist.com data 
 * Checking the new source
 * Removed options for hourly, and 6 hours in update frequency
 * General improvements
 
-**Version 1.4.0 / 2018-1-19**
+Version 1.4.0 / 2018-1-19
 * Added support for new profile page
 * Checking new scammer list at https://www.reddit.com/r/hardwareswap/wiki/banlist
 * Added option to check for sketchy users (disabled by default)
 * General improvements and bug fixes
 
-**Version 1.3.2 / 2017-7-7**
+Version 1.3.2 / 2017-7-7
 * Fixed issues with dependencies
 * Switched to local storage for Firefox support
 * Made changes to fix unsanitized data
 * Changed name to "Reddit Scam Labeler", because the other title was misleading (according to Chrome)
 
-**Version 1.3.1 / 2017-2-11**
+Version 1.3.1 / 2017-2-11
 * Fixed bug where extension was not running in inbox
 
-**Version 1.3.0 / 2017-1-28**
+Version 1.3.0 / 2017-1-28
 * Fixed typos on the subreddit list
 * Added badge indicators
 * Added more info box when clicking on the badge
@@ -49,15 +61,15 @@ Reddit Shopping Tool is an extension that automatically identifies any users tha
 * Added support for Firefox
 * Minor bug fixes
 
-**Version 1.2.1 / 2016-8-1**
+Version 1.2.1 / 2016-8-1
 * Fixed bug where list was not updating
 
-**Version 1.2.0 / 2016-7-10**
+Version 1.2.0 / 2016-7-10
 * Added subreddit filter
 * Added option to edit filter list
 * Fixed: update list when extension updates
 
-**Version 1.1.0 / 2016-7-1**
+Version 1.1.0 / 2016-7-1
 * New tags [SKETCHY], [TROLL], [ACCOUNT COMPROMISED]
 * Added RES never ending support (disabled by default, enable it in options)
 * Added Options page
@@ -68,8 +80,8 @@ Reddit Shopping Tool is an extension that automatically identifies any users tha
 * Added info tab
 * Minor bug fixes
 
-**Version 1.0.1 / 2016-6-13**
+Version 1.0.1 / 2016-6-13
 * Minor bug fixes
 
-**Version 1.0.0 / 2016-6-13**
+Version 1.0.0 / 2016-6-13
 * Initial release
