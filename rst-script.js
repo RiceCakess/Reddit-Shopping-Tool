@@ -72,9 +72,9 @@ function labelUsers(){
 }
 
 var sources = [
-	"https://reddit.com/r/hardwareswap/wiki/banlist.json",
-	"https://reddit.com/r/RSTList/wiki/banlist.json",  
-	"https://reddit.com/r/RSTList/wiki/sketchylist.json"
+	"https://www.reddit.com/r/hardwareswap/wiki/banlist.json",
+	"https://www.reddit.com/r/RSTList/wiki/banlist.json",  
+	"https://www.reddit.com/r/RSTList/wiki/sketchylist.json"
 ];
 function updateList(callback){
 	var users = {};
