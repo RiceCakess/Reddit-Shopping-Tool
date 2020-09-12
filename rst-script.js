@@ -96,7 +96,7 @@ function updateList(callback){
 			chrome.storage.local.set({"timestamp": Date.now()});
 			chrome.storage.local.set({"version": version});
 		}
-		console.log("[RST] " + msg);
+		// console.log("[RST] " + msg);
 		if( !!callback ) {
 			callback(msg);
 		}
